@@ -1,0 +1,123 @@
+﻿<Window x:Class="PrintBarcodeSheeat.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PrintBarcodeSheeat"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="800">
+    <Window.Resources>
+        <local:BarCodeConvertor x:Key="BarCode"/>
+        <DataTemplate x:Key="BarTemplate">
+            <Border  BorderBrush="Aqua" BorderThickness="{Binding Settings.ElementBorderThickness}">
+                <Grid Width="{Binding Settings.ElementWidth}" Height="{Binding Settings.ElementHeight}" Margin="{Binding Settings.ElementGridThickness}" >
+                <Image Source="{Binding codeText,Converter={StaticResource BarCode}}" Margin="1,12,1,0" VerticalAlignment="Top" Stretch="Fill"></Image>
+                <StackPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow"  Margin="1" FontSize="10" Background="White" Text="{Binding DescriptionText}" VerticalAlignment="Top" HorizontalAlignment="Center" MaxHeight="26" ></TextBlock>
+                </StackPanel>
+                <TextBlock FontSize="12" Background="White" Text="{Binding codeText}" VerticalAlignment="Bottom" HorizontalAlignment="Center"  Height="13"></TextBlock>
+            </Grid>
+</Border>
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="PanelTemplate">
+            <WrapPanel>
+            </WrapPanel>
+        </ItemsPanelTemplate>
+    </Window.Resources>
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="64"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="256"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="256"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Image Name="FirstBarCode"></Image>
+        <DataGrid Name="DataView"  Grid.Row="1"  Drop="DataView_Drop" AllowDrop="True">
+        </DataGrid>
+        <ListBox Name="PreViewPrint" ItemsSource="{Binding DataPrintCode}" Grid.Column="1" Grid.RowSpan="1" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemTemplate="{StaticResource BarTemplate}">
+            
+             <!--<local:DataBarCode codeText="test" DescriptionText="121"/>-->
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="Control">
+                    <Setter Property="Focusable" Value="False" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel>                        
+                    </WrapPanel>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            
+        </ListBox>
+        <DocumentViewer PreviewMouseMove="docViewer_MouseMove" Name="docViewer" Grid.Column="1" Grid.Row="1">
+            
+            
+        </DocumentViewer>
+        <RichTextBox Opacity="0.1" Grid.Column="1" Grid.Row="1" Margin="0,32,10,0"/>
+        <TextBox MinWidth="10" Height="50" VerticalAlignment="Bottom" TextChanged="TextBox_TextChanged">sdfwer</TextBox>
+        <StackPanel Name="Settings" Grid.Column="2" Grid.RowSpan="2">
+            <ComboBox Name="Prints" SelectionChanged="Prints_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Description}"></TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBox Text="List Top Margin"></TextBox>
+                <TextBox Text="{Binding SettingsProp.ListTopMargin}" MinWidth="16" PreviewTextInput="NumberTextBox_PreviewTextInput"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBox Text="List Left Margin"></TextBox>
+                <TextBox Text="{Binding SettingsProp.ListLeftMargin}" MinWidth="16" PreviewTextInput="NumberTextBox_PreviewTextInput"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBox Text="Height Page"></TextBox>
+                <TextBox Text="{Binding SettingsProp.HeightPage}" MinWidth="16" PreviewTextInput="NumberTextBox_PreviewTextInput"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBox Text="Width Page"></TextBox>
+                <TextBox Text="{Binding SettingsProp.WidthPage}" MinWidth="16" PreviewTextInput="NumberTextBox_PreviewTextInput"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBox Text="ElementBorderThickness"></TextBox>
+                <TextBox Text="{Binding SettingsProp.ElementBorderThickness}" MinWidth="16" PreviewTextInput="NumberTextBox_PreviewTextInput"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBox Text="ElementHeight"></TextBox>
+                <TextBox Text="{Binding SettingsProp.ElementHeight}" MinWidth="16" PreviewTextInput="NumberTextBox_PreviewTextInput"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBox Text="ElementWidth"></TextBox>
+                <TextBox Text="{Binding SettingsProp.ElementWidth}" MinWidth="16" PreviewTextInput="NumberTextBox_PreviewTextInput"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBox Text="ElementGridThickness.Left"></TextBox>
+                <TextBox Text="{Binding SettingsProp.ElementGridThicknessLeft}" MinWidth="16" PreviewTextInput="NumberTextBox_PreviewTextInput"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBox Text="Element Grid Thickness Top"></TextBox>
+                <TextBox Text="{Binding SettingsProp.ElementGridThicknessTop}" MinWidth="16" PreviewTextInput="NumberTextBox_PreviewTextInput"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBox Text="ElementGridThickness.Right"></TextBox>
+                <TextBox Text="{Binding SettingsProp.ElementGridThicknessRight}" MinWidth="16" PreviewTextInput="NumberTextBox_PreviewTextInput"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBox Text="ElementGridThickness.Bottom"></TextBox>
+                <TextBox Text="{Binding SettingsProp.ElementGridThicknessBottom}" MinWidth="16" PreviewTextInput="NumberTextBox_PreviewTextInput"/>
+            </StackPanel>
+        </StackPanel>
+        <Button Content="Print" Click="Button_Click" Grid.Column="2" Grid.Row="2"></Button>
+        <Button Content="RePage" Click="Button_Click_1" Grid.Column="1" Grid.Row="2"></Button>
+    </Grid>
+</Window>
